@@ -54,4 +54,17 @@ public class CourseTools {
         courseReservationService.save(courseReservation);
         return String.valueOf(courseReservation.getId());
     }
+
+    @Tool(description = "删除刚刚生成的预约单，只能删除该用户的刚才预定的")
+    public String deleteCourseReservation(@ToolParam(description = "预约单的ID")Integer reservationId, @ToolParam(description = "该用户的姓名")String name) {
+        CourseReservation courseReservation = courseReservationService.getById(reservationId);
+        if(courseReservation == null) {
+            return "没有该预约单";
+        }
+        if(!courseReservation.getStudentName().equals(name)) {
+            return "该预约单号不是您的预约单";
+        }
+        courseReservationService.removeById(reservationId);
+        return "成功删除";
+    }
 }
