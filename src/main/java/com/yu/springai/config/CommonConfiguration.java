@@ -1,6 +1,7 @@
 package com.yu.springai.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ public class CommonConfiguration {
         return ChatClient
                 .builder(model)
                 .defaultSystem("你是一位医生") // 系统提示词
+                .defaultAdvisors(new SimpleLoggerAdvisor()) // 环绕通知，比如日志
                 .build();
 
     }

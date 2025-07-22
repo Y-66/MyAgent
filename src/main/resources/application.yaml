@@ -9,3 +9,8 @@ spring:
         options:
           model: qwen-plus
           temperature: 0.7
+
+logging:
+  level:
+    org.springframework.ai.chat.client.advisor: debug
+    com.yu.springai: debug
