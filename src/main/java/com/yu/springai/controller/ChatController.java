@@ -13,7 +13,7 @@ public class ChatController {
 
     private final ChatClient chatClient;
 
-    @RequestMapping("/chat")
+    @RequestMapping(value = "/chat", produces = "text/html;charset=utf-8")
     public Flux<String> chat(String prompt) {
         // .call 全部返回  .stream 流式返回
         return chatClient.prompt()
