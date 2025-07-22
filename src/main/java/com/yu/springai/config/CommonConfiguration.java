@@ -2,7 +2,6 @@ package com.yu.springai.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +11,7 @@ public class CommonConfiguration {
     public ChatClient chatClient(OpenAiChatModel model){
         return ChatClient
                 .builder(model)
+                .defaultSystem("你是一位医生") // 系统提示词
                 .build();
 
     }
