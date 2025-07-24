@@ -13,6 +13,10 @@ spring:
         options:
           model: text-embedding-v3
           dimensions: 1024
+    vectorstore:
+      pinecone:
+        api-key: pcsk_4wuZvE_AJw6GmknZsKA73HFyCfRGFsNioaj6WjiJun9MeH7Gjkx56ryKxK4TpB2oz7zJhX
+        index-name: my-first-springai
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/itheima?serverTimezone=Asia/Shanghai&useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowPublicKeyRetrieval=true&allowMultiQueries=true&useServerPrepStmts=false
