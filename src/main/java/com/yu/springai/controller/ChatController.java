@@ -45,6 +45,7 @@ public class ChatController {
 
     private Flux<String> multimodalityChat(String prompt, String chatId, List<MultipartFile> files) {
         // 1. 解析多媒体
+        // TODO bug：只支持图片，上传音频会报错，alibaba 的 qwen 模型与 SpringAi 的接口标准不符
         List<Media> medias = files.stream()
                 .map(file -> new Media(
                         MimeType.valueOf(Objects.requireNonNull(file.getContentType())),
