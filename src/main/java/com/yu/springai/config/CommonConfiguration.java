@@ -8,6 +8,7 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -20,6 +21,7 @@ public class CommonConfiguration {
     public ChatClient chatClient(OpenAiChatModel model, ChatMemory chatMemory){
         return ChatClient
                 .builder(model)
+                .defaultOptions(ChatOptions.builder().model("qwen-omni-turbo").build())
                 .defaultSystem("你是一位医生") // 系统提示词
                 .defaultAdvisors(
                         new SimpleLoggerAdvisor(),
@@ -74,4 +76,5 @@ public class CommonConfiguration {
                                 .build()
                         ).build();
     }
+
 }
