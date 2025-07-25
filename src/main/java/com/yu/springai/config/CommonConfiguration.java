@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CommonConfiguration {
     @Bean
-    public ChatClient chatClient(OpenAiChatModel model, ChatMemory chatMemory){
+    public ChatClient chatClient(OpenAiChatModel model, ChatMemoryConfiguration chatMemory){
         return ChatClient
                 .builder(model)
                 .defaultOptions(ChatOptions.builder().model("qwen-omni-turbo").build())
@@ -33,7 +33,7 @@ public class CommonConfiguration {
     }
 
     @Bean
-    public ChatClient gameChatClient(OpenAiChatModel model, ChatMemory chatMemory){
+    public ChatClient gameChatClient(OpenAiChatModel model, ChatMemoryConfiguration chatMemory){
         return ChatClient
                 .builder(model)
                 .defaultSystem(SystemConstants.GAME_SYSTEM_PROMPT) // 系统提示词
@@ -47,7 +47,7 @@ public class CommonConfiguration {
     }
 
     @Bean
-    public ChatClient serviceChatClient(OpenAiChatModel model, ChatMemory chatMemory, CourseTools courseTools){
+    public ChatClient serviceChatClient(OpenAiChatModel model, ChatMemoryConfiguration chatMemory, CourseTools courseTools){
         return ChatClient
                 .builder(model)
                 .defaultSystem(SystemConstants.SERVICE_SYSTEM_PROMPT) // 系统提示词
@@ -62,7 +62,7 @@ public class CommonConfiguration {
     }
 
     @Bean
-    public ChatClient pdfChatClient(OpenAiChatModel model, ChatMemory chatMemory, VectorStore vectorStore){
+    public ChatClient pdfChatClient(OpenAiChatModel model, ChatMemoryConfiguration chatMemory, VectorStore vectorStore){
         return ChatClient
                 .builder(model)
                 .defaultSystem("请根据上下文回答问题，遇到上下文没有的问题，不要随意编造。") // 系统提示词
