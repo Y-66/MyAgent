@@ -5,9 +5,12 @@ import com.yu.springai.tools.CourseTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -54,5 +57,21 @@ public class CommonConfiguration {
                 .defaultTools(courseTools)
                 .build();
 
+    }
+
+    @Bean
+    public ChatClient pdfChatClient(OpenAiChatModel model, ChatMemory chatMemory, VectorStore vectorStore){
+        return ChatClient
+                .builder(model)
+                .defaultSystem("请根据上下文回答问题，遇到上下文没有的问题，不要随意编造。") // 系统提示词
+                .defaultAdvisors(
+                        new SimpleLoggerAdvisor(),
+                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                        QuestionAnswerAdvisor.builder(vectorStore)
+                                .searchRequest(SearchRequest.builder()
+                                        .similarityThreshold(0.6)
+                                        .topK(2).build())
+                                .build()
+                        ).build();
     }
 }

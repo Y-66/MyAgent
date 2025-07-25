@@ -43,6 +43,25 @@ public class PdfController {
 
     private final ChatHistoryRepository chatHistoryRepository;
 
+    @RequestMapping(value = "/chat", produces = "text/html;charset=utf-8")
+    public Flux<String> chat(String prompt, String chatId) {
+        // 1. 找到会话文件
+        Resource file = fileRepository.getFile(chatId);
+        if (!file.exists()) {
+            throw new RuntimeException("文件会话不存在！");
+        }
+        // 2. 保存回话ID
+        chatHistoryRepository.save("pdf", chatId);
+        // 3. 请求模型
+
+        // .call 全部返回  .stream 流式返回
+        return pdfChatClient.prompt()
+                .user(prompt)
+                .advisors(a -> a.param(CONVERSATION_ID, chatId))
+                .advisors(a -> a.param(FILTER_EXPRESSION, "file_name == '" + file.getFilename() + "'"))
+                .stream()
+                .content();
+    }
 
     /**
      * 文件上传
