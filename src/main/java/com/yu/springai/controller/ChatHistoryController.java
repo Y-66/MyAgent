@@ -1,7 +1,10 @@
 package com.yu.springai.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.yu.springai.entity.po.Conversation;
 import com.yu.springai.entity.vo.MessageVO;
 import com.yu.springai.repository.ChatHistoryRepository;
+import com.yu.springai.service.IConversationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.Message;
@@ -19,10 +22,21 @@ public class ChatHistoryController {
 
     private final ChatHistoryRepository chatHistoryRepository;
 
+    private final IConversationService conversationService;
+
     private final ChatMemory chatMemory;
     @GetMapping("/{type}")
     public List<String> getChatIds(@PathVariable("type") String type) {
-        return chatHistoryRepository.getChatIds(type);
+        LambdaQueryWrapper<Conversation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Conversation::getBusinessType, type)
+                .select(Conversation::getConversationId)
+                .orderByDesc(Conversation::getCreatedAt);
+
+        return conversationService.list(queryWrapper)
+                .stream()
+                .map(Conversation::getConversationId)
+                .distinct()
+                .toList(); // 或使用 .collect(Collectors.toList())
     }
 
     @GetMapping("/{type}/{chatId}")

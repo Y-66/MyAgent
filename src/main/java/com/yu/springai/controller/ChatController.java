@@ -1,6 +1,8 @@
 package com.yu.springai.controller;
 
+import com.yu.springai.entity.po.Conversation;
 import com.yu.springai.repository.ChatHistoryRepository;
+import com.yu.springai.service.IConversationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.content.Media;
@@ -23,13 +25,18 @@ public class ChatController {
 
     private final ChatClient chatClient;
     private final ChatHistoryRepository chatHistoryRepository;
+    private final IConversationService conversationService;
 
     @RequestMapping(value = "/chat", produces = "text/html;charset=utf-8")
     public Flux<String> chat(@RequestParam("prompt") String prompt,
                              @RequestParam("chatId")String chatId,
                              @RequestParam(value = "files", required = false)List<MultipartFile> files) {
         // 1. 保存回话ID
-        chatHistoryRepository.save("chat", chatId);
+        Conversation conversation = new Conversation();
+        conversation.setBusinessType("chat");
+        conversation.setConversationId(chatId);
+        conversationService.save(conversation);
+        // chatHistoryRepository.save("chat", chatId);
         // 2. 请求模型
 
         // .call 全部返回  .stream 流式返回

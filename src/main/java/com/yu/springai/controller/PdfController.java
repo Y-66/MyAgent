@@ -1,9 +1,11 @@
 package com.yu.springai.controller;
 
 
+import com.yu.springai.entity.po.Conversation;
 import com.yu.springai.entity.vo.Result;
 import com.yu.springai.repository.ChatHistoryRepository;
 import com.yu.springai.repository.FileRepository;
+import com.yu.springai.service.IConversationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -43,6 +45,8 @@ public class PdfController {
 
     private final ChatHistoryRepository chatHistoryRepository;
 
+    private final IConversationService conversationService;
+
     @RequestMapping(value = "/chat", produces = "text/html;charset=utf-8")
     public Flux<String> chat(String prompt, String chatId) {
         // 1. 找到会话文件
@@ -51,7 +55,11 @@ public class PdfController {
             throw new RuntimeException("文件会话不存在！");
         }
         // 2. 保存回话ID
-        chatHistoryRepository.save("pdf", chatId);
+        // chatHistoryRepository.save("pdf", chatId);
+        Conversation conversation = new Conversation();
+        conversation.setBusinessType("pdf");
+        conversation.setConversationId(chatId);
+        conversationService.save(conversation);
         // 3. 请求模型
 
         // .call 全部返回  .stream 流式返回
