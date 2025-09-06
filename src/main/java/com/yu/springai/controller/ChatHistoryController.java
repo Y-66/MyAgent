@@ -8,10 +8,7 @@ import com.yu.springai.service.IConversationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,5 +40,13 @@ public class ChatHistoryController {
     public List<MessageVO> getChatMessages(@PathVariable("type") String type, @PathVariable("chatId") String chatId) {
         List<Message> messages = chatMemory.get(chatId);
         return messages.stream().map(MessageVO::new).toList();
+    }
+
+    @DeleteMapping("/{type}/{chatId}")
+    public void deleteChatById(@PathVariable("type") String type, @PathVariable("chatId") String chatId) {
+        LambdaQueryWrapper<Conversation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Conversation::getBusinessType, type)
+                        .eq(Conversation::getConversationId, chatId);
+        conversationService.remove(queryWrapper);
     }
 }

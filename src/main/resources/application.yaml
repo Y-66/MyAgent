@@ -7,7 +7,7 @@ spring:
       base-url: https://dashscope.aliyuncs.com/compatible-mode
       chat:
         options:
-          model: qwen-plus
+          model: qwen-max-latest
           temperature: 0.7
       embedding:
         options:
